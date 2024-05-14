@@ -55,7 +55,19 @@ const moving = (event) => {
 } 
 };
       
+const RandomWord = (event) => {
+  //randomly generate a number and pick that number from the list of words
   
+  let 
+
+};
+
+
+
+
+
+
+
 
 
 
