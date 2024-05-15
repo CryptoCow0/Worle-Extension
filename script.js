@@ -4,11 +4,11 @@ document.body.style.width = '600px';
 const gridItems = document.querySelectorAll('.grid-item');
 
 // Determine keys pressed
-const forceKeyToUpper = (event) => {
+const MovingForward = (event) => {
   let element = event.target;
   let charInput = event.key; // use e.key instead of e.keyCode for modern browsers apperantly
 
-  const gridItem = element.nextElementSibling;
+  const gridItem = element.nextElementSibling; //moves to next item
   if (gridItem){
     gridItem.focus();
   }
@@ -17,26 +17,66 @@ const forceKeyToUpper = (event) => {
   if (charInput === 'Backspace'|| charInput === 'ArrowLeft' || charInput === 'ArrowRight') 
     {
       return;
-      //console.log('balls');
-    // If it's a lowercase letter or a non-alphabetic key, let it pass without conversion
     }
     //convert the element to an UPPERCASE LETTER
-    element.value = element.value.toUpperCase();
+  element.value = element.value.toUpperCase();
+  
+};
+
+const handleInput = (event) => {
+  let element = event.target;
+  let charInput = event.data; // Get the character entered
+  let cursorPositionBefore = element.selectionStart; // Get cursor position before input
+
+
+  if (charInput && charInput.trim() !== '') {
+      // Convert input to uppercase
+      element.value = charInput.toUpperCase();
+      // Move focus to the next grid item
+      //moveToNextGridElement(element);
+      const gridItem = element.nextElementSibling; //moves to next item
+      if (gridItem){
+      gridItem.focus();
+      }
+  }     
+  let cursorPositionAfter = element.selectionStart; // Get cursor position after input
+
+  // If the cursor position decreased after input, it indicates backward movement
+  if (cursorPositionAfter === cursorPositionBefore) {
+      // If the cursor is at the beginning of the input, move to the previous grid element
+      if (cursorPositionAfter === 0) {
+          moveToPreviousGridElement(element);
+      }
+  }
 
 };
 
 
-//Define the function to move focus to the previous grid element
+
+
+
+
+
+// Define a function to get the index of a grid item
+const getIndex = (element) => {
+  const gridItems = document.querySelectorAll('.grid-item');
+  return Array.from(gridItems).indexOf(element);
+};
+
+// Define the function to move focus to the previous grid element
 const moveToPreviousGridElement = (element) => {
-    // Move focus to the previous grid element
-    const gridItem = element.previousElementSibling;
-    if (gridItem) {
-        gridItem.focus();
-    }
+  // Get the index of the current element
+  const currentIndex = getIndex(element);
+  // Move focus to the previous grid element
+  const previousIndex = currentIndex - 1;
+  if (previousIndex >= 0) {
+      const gridItems = document.querySelectorAll('.grid-item');
+      gridItems[previousIndex].focus();
+  }
 };
 
 // move across the grid
-const moving = (event) => {
+const BackwardsMotion = (event) => {
   let element = event.target;
   let charInput = event.key;
 
@@ -45,15 +85,20 @@ const moving = (event) => {
        // If there is text selected, delete the selected text
        if (element.selectionStart !== element.selectionEnd) {
         return; // Let the default backspace behavior handle deletion
-    }
+    };
     
     // If the cursor is at the beginning of the input, move to the previous grid element
     if (element.selectionStart === 0) {
         moveToPreviousGridElement(element);
         event.preventDefault(); // Prevent the default backspace behavior
-    }
-} 
+    };
 };
+
+
+};
+
+
+
       
 const RandomWord = (event) => {
   //randomly generate a number and pick that number from the list of words
@@ -93,14 +138,6 @@ fs.readFile(filePath, 'utf8', (err, data) => {
 
 
 
-
-
-
-
-
-
-
-
 // Iterate over each grid item
 gridItems.forEach(gridItem => {
    //onkeyup = gitdItem.value = gridItem.value.toUpperCase();
@@ -117,8 +154,8 @@ gridItems.forEach(gridItem => {
     gridItem.style.fontSize = fontSize + 'px';
 
     //SETS EACH INPUT TO BE UPPERCASE
-    gridItem.addEventListener("input", forceKeyToUpper);
-    gridItem.addEventListener("keydown", moving);
+    gridItem.addEventListener("input", handleInput);
+    //gridItem.addEventListener("keydown", BackwardsMotion);
 
   });
 
