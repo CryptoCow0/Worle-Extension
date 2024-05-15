@@ -17,7 +17,7 @@ const forceKeyToUpper = (event) => {
   if (charInput === 'Backspace'|| charInput === 'ArrowLeft' || charInput === 'ArrowRight') 
     {
       return;
-      console.log('balls');
+      //console.log('balls');
     // If it's a lowercase letter or a non-alphabetic key, let it pass without conversion
     }
     //convert the element to an UPPERCASE LETTER
@@ -57,8 +57,37 @@ const moving = (event) => {
       
 const RandomWord = (event) => {
   //randomly generate a number and pick that number from the list of words
-  
-  let 
+
+  let x = Math.floor(Math.random() * 458); // random number from 1 to 458
+  const fs = require('fs');
+
+// Specify the file path
+const filePath = 'WordleList.txt'; // Replace 'path/to/your/file.txt' with the path to your file
+
+// Read the file asynchronously
+fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+        console.error('Error reading file:', err);
+        return;
+    }
+
+    // Split the file contents into an array of lines
+    const lines = data.split('\n');
+
+    let secretWord;
+
+    // Iterate through each line
+    for(let i =0; i < x; i++){
+        const line = lines[i];
+
+        if (i === x-1){
+          secretWord = line.trim();
+          const secretWordHeading = document.getElementById('secretWordHeading');
+          secretWordHeading.textContent = secretWord;
+        }
+    };
+});
+
 
 };
 
