@@ -2,59 +2,59 @@ document.body.style.width = '600px';
 // document.body.style.height = '700px';
 // Get all the grid items
 const gridItems = document.querySelectorAll('.grid-item');
+let count = 0;
+let x;
+const currentWord = []; // takes letters from grid
+let Word = ''; // used for checking
+let condition = false; // used in Input Handling
 
 // Determine keys pressed
-const MovingForward = (event) => {
-  let element = event.target;
-  let charInput = event.key; // use e.key instead of e.keyCode for modern browsers apperantly
-
-  const gridItem = element.nextElementSibling; //moves to next item
-  if (gridItem){
-    gridItem.focus();
-  }
-
-  // handle exceptions
-  if (charInput === 'Backspace'|| charInput === 'ArrowLeft' || charInput === 'ArrowRight') 
-    {
-      return;
-    }
-    //convert the element to an UPPERCASE LETTER
-  element.value = element.value.toUpperCase();
-  
-};
-
 const handleInput = (event) => {
   let element = event.target;
   let charInput = event.data; // Get the character entered
-  let cursorPositionBefore = element.selectionStart; // Get cursor position before input
+   x = event.keyCode;
+  //updateCountDisplay();
+  if(charInput && condition === false){
+        // Convert input to uppercase
+    element.value = charInput.toUpperCase();
 
+    currentWord.push(element.value);// this will help us when checking the word
 
-  if (charInput && charInput.trim() !== '') {
-      // Convert input to uppercase
-      element.value = charInput.toUpperCase();
-      // Move focus to the next grid item
-      //moveToNextGridElement(element);
-      const gridItem = element.nextElementSibling; //moves to next item
-      if (gridItem){
-      gridItem.focus();
-      }
-  }     
-  let cursorPositionAfter = element.selectionStart; // Get cursor position after input
-
-  // If the cursor position decreased after input, it indicates backward movement
-  if (cursorPositionAfter === cursorPositionBefore) {
-      // If the cursor is at the beginning of the input, move to the previous grid element
-      if (cursorPositionAfter === 0) {
-          moveToPreviousGridElement(element);
-      }
-  }
+    //updateCountDisplay();
+    if (count === 4){
+          condition = true; // you are at the end of the word
+          return;
+        };
+        
+        // Move focus to the next grid item
+        //moveToNextGridElement(element);
+        const gridItem = element.nextElementSibling; //moves to next item
+        count++; // when this is 5 we don't want to move
+        if (gridItem){
+        gridItem.focus();
+        };
+    }   
 
 };
 
 
 
-
-
+//helper fucntion
+const updateCountDisplay = () => {
+  const h1Element = document.getElementById('countDisplay');
+  if (h1Element) {
+      h1Element.textContent = Word.toString(); // Convert count to string before setting as text content
+      //h1Element.textContent = x;
+    } 
+};
+// debugging fucnction
+const printKeyEvent = (event) => {
+  const h2Element = document.getElementById('countDisplay');
+  if (h2Element) {
+      h2Element.textContent = Word.toString(); // Set the text content to the value of event.key
+     // h2Element.textContent = x;
+    }
+};
 
 
 // Define a function to get the index of a grid item
@@ -77,30 +77,81 @@ const moveToPreviousGridElement = (element) => {
 
 // move across the grid
 const BackwardsMotion = (event) => {
+  
   let element = event.target;
-  let charInput = event.key;
+  let charInput = event.keyCode;
 
-  if (charInput === 'Backspace') 
+  if (charInput === 8) 
+      {
+        //event.preventDefault();
+
+       if(count !== 0)
+         {count--;
+          condition = false;
+         };
+       if(count === 0){condition=false;};
+
+       element.value = element.value.slice(0, -1);
+       moveToPreviousGridElement(element);
+       
+        };
+   
+};
+
+const wrongLength = (event) =>{
+  const h1Element = document.getElementById('countDisplay');
+if (h1Element) {
+    h1Element.textContent = "Not long enough"; // Convert count to string before setting as text content
+    //h1Element.textContent = x;
+  } 
+};
+const rightLength = (event) => {
+ 
+  const h2Element = document.getElementById('WordLength');
+  if(h2Element){
+    h2Element.textContent = Word;
+  }
+}
+
+const Comparison = (event) => {
+  let element = event.target;
+  let charInput = event.keyCode;
+  
+  if (charInput === 13)// enter was pushed
     {
-       // If there is text selected, delete the selected text
-       if (element.selectionStart !== element.selectionEnd) {
-        return; // Let the default backspace behavior handle deletion
+      Word = currentWord.join('');
+      if(Word.length !== 5){
+        Word = ''; // not long enough reset
+        wrongLength(event);
+      }
+      // rightLength(event); This does work
+
+    // Compare it to the secret word
+    if (Word === "GREAT"){
+      const gridItems = document.querySelectorAll('.grid-item');
+      index = getIndex(element);
+      // Change the background color to green
+      for(let i = 5; i>0; i--){
+        
+        item = gridItems[index];
+      //gridItems.forEach(function(item) {
+        item.style.backgroundColor = 'green';
+        index--;
+
+    //});
+  }
+
+
+  }
+
+
     };
-    
-    // If the cursor is at the beginning of the input, move to the previous grid element
-    if (element.selectionStart === 0) {
-        moveToPreviousGridElement(element);
-        event.preventDefault(); // Prevent the default backspace behavior
-    };
-};
-
 
 };
-
 
 
       
-const RandomWord = (event) => {
+const RandomWord = () => {
   //randomly generate a number and pick that number from the list of words
 
   let x = Math.floor(Math.random() * 458); // random number from 1 to 458
@@ -154,8 +205,14 @@ gridItems.forEach(gridItem => {
     gridItem.style.fontSize = fontSize + 'px';
 
     //SETS EACH INPUT TO BE UPPERCASE
-    gridItem.addEventListener("input", handleInput);
-    //gridItem.addEventListener("keydown", BackwardsMotion);
+    // document.addEventListener('keydown', (event) => {
+    //    wrongLength(event);
+    // });
+    gridItem.addEventListener("input", handleInput); // This is for characters placed into the grid
+ 
+    gridItem.addEventListener("keydown", BackwardsMotion); // backspace isn't considered an input so this is a seperate consideration
 
-  });
+    gridItem.addEventListener("keydown", Comparison); // checks if this is a word
+
+});
 

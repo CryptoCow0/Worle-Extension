@@ -2,6 +2,11 @@ h1{
     text-align: center;
     color:white
   }
+h2{
+    text-align: center;
+    color: white;
+
+}
 
   .grid-container {
     display: grid;
@@ -13,8 +18,9 @@ h1{
   }
 
   .grid-item {
-    background-color: rgba(80, 76, 76, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.8);
+    background-color: rgba(80, 79, 79, 0.8);
+    color:white;
+    border: 1px solid rgba(255, 250, 250, 0.8);
     width: 120px; /* Set the width of each grid item */
     height: 120px; /* Set the height of each grid item */
     font-size: 100px;
