@@ -1,4 +1,3 @@
-
 document.body.style.width = '600px';
 //Put the cursor into the first spot
 document.addEventListener('DOMContentLoaded', function() {
@@ -11,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Global variables
 const gridItems = document.querySelectorAll('.grid-item');
 let count = 0;
+//RandomWord();
 // let x; was used for testing KeyCodes
 const currentWord = []; // takes letters from grid
 let Word = ''; // used for checking
@@ -136,6 +136,54 @@ const rightLength = (event) => {
   }
 }
 
+const fetchSecretWord = () => {
+  //randomly generate a number and pick that number from the list of words
+  const x = Math.floor(Math.random() * 164); // random number from 0 to 457
+
+  // Specify the file path or URL
+  const filePath = 'WordleList.txt'; // Update this to the correct path or URL
+
+  return fetch(filePath)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.text();
+    })
+    .then(data => {
+      // Split the file contents into an array of lines
+      const lines = data.split('\n');
+
+      if (lines.length >= x) {
+        // Get the secret word
+        return lines[x].trim();
+      } else {
+        throw new Error('The random number exceeds the number of words in the list.');
+      }
+    });
+};
+
+let secretWord = '';
+
+const setSecretWord = () => {
+  fetchSecretWord()
+    .then(word => {
+      secretWord = word;
+      // Update the DOM with the secret word if needed
+      const secretWordHeading = document.getElementById('secretWordHeading');
+      if (secretWordHeading) {
+        secretWordHeading.textContent = secretWord;
+      }
+      console.log('Secret Word:', secretWord); // For debugging
+    })
+    .catch(error => {
+      console.error('Error fetching secret word:', error);
+    });
+};
+
+
+setSecretWord(); // only call it once
+
 const Comparison = (event) => {
   let element = event.target;
   let charInput = event.keyCode;
@@ -151,7 +199,8 @@ const Comparison = (event) => {
       }
       
       //will update this soon
-      secretWord = "GREAT"
+      //secretWord = "GREAT";
+      
     
     // Compare it to the secret word
     if (Word === secretWord){
@@ -251,42 +300,6 @@ updateWordDisplay();
 
 }
       
-const RandomWord = () => {
-  //randomly generate a number and pick that number from the list of words
-
-  let x = Math.floor(Math.random() * 458); // random number from 1 to 458
-  const fs = require('fs');
-
-// Specify the file path
-const filePath = 'WordleList.txt'; // Replace 'path/to/your/file.txt' with the path to your file
-
-// Read the file asynchronously
-fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-        console.error('Error reading file:', err);
-        return;
-    }
-
-    // Split the file contents into an array of lines
-    const lines = data.split('\n');
-
-    let secretWord;
-
-    // Iterate through each line
-    for(let i =0; i < x; i++){
-        const line = lines[i];
-
-        if (i === x-1){
-          secretWord = line.trim();
-          const secretWordHeading = document.getElementById('secretWordHeading');
-          secretWordHeading.textContent = secretWord;
-        }
-    };
-});
-
-
-};
-
 
 
 // Iterate over each grid item
@@ -304,18 +317,6 @@ gridItems.forEach(gridItem => {
     // Set the font size of the grid item
     gridItem.style.fontSize = fontSize + 'px';
 
-    //SETS EACH INPUT TO BE UPPERCASE
-    // document.addEventListener("input", function(event) {
-    //    //printKeyEvent(event);
-    //    var charCode = event.keyCode;
-
-    //    //printKeyEvent(event);
-    //     if (charCode >= 65 && charCode <= 90){
-    //       printKeyEvent(event);
-
-    //       handleInput(event);
-    //     }
-    // });
     gridItem.addEventListener("input", handleInput); // This is for characters placed into the grid
     //gridItem.addEventListener("keydown", handleInput);
     gridItem.addEventListener("keydown", BackwardsMotion); // backspace isn't considered an input so this is a seperate consideration
