@@ -8,62 +8,54 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-
+// Global variables
 const gridItems = document.querySelectorAll('.grid-item');
 let count = 0;
-let x;
+// let x; was used for testing KeyCodes
 const currentWord = []; // takes letters from grid
 let Word = ''; // used for checking
 let condition = false; // used in Input Handling
 
+
+
 // Determine keys pressed
 const handleInput = (event) => {
-    let element = event.target;
+    let element = event.target; //element that trigged the event
     let charInput = event.data; // Get the character entered
-
-    x = event.keyCode;
-    //updateCountDisplay();
-//there is something in the grid
+     
+//    x = event.keyCode; not actually needed because we are only concered with inputs
     
     //Input is a character
     if(charInput && charInput !== '' && condition === false){
-          // Convert input to uppercase
+      // Convert input to uppercase
       element.value = charInput.toUpperCase();
 
-      currentWord.push(element.value);// this will help us when checking the word
+      currentWord.push(element.value); // this will help us when checking the word
 
-      updateCountDisplay();
-      //return;
-    
-    
+      updateWordDisplay(); // show's us the word for debuggin
 
-    if (count === 4){
+    count++; // when this is 4 we don't want to move
+
+    if (count === 5){
       condition = true; // you are at the end of the word
       return;
     };
     
     // Move focus to the next grid item
-   // moveToNextGridElement(element);
     const gridItem = element.nextElementSibling; //moves to next item
-    count++; // when this is 5 we don't want to move
     if (gridItem){
     gridItem.focus();
-    
     };
-
   }
 
-
-  };
-
+};
 
 
-//helper fucntion
-const updateCountDisplay = () => {
+//helper fucntion 
+const updateWordDisplay = () => {
   const h1Element = document.getElementById('countDisplay');
   if (h1Element) {
-      h1Element.textContent = currentWord.toString(); // Convert count to string before setting as text content
-      //h1Element.textContent = x;
+      h1Element.textContent = count.toString(); // Convert count to string before setting as text content
     } 
 };
 // debugging fucnction
@@ -74,7 +66,6 @@ const printKeyEvent = (event) => {
      // h2Element.textContent = x;
     }
 };
-
 
 // Define a function to get the index of a grid item
 const getIndex = (element) => {
@@ -102,21 +93,30 @@ const BackwardsMotion = (event) => {
   index = getIndex(element);
   if (charInput === 8) 
       {
+        
+      if(count === 0){
+        condition=false;
+          return; // to avoid moving back
+        };
+
+
       event.preventDefault();
       currentWord.pop();
 
-      updateCountDisplay();
+      updateWordDisplay();
        if(count !== 0)
          {count--;
           condition = false;
          };
-       if(count === 0){condition=false;};
+       
          
        element.value = element.value.slice(0, -1);
        
        //currentWord.pop(index);
         moveToPreviousGridElement(element);
+        updateWordDisplay();
         }
+      
       };
 
 const wrongLength = (event) =>{
@@ -127,6 +127,7 @@ if (h1Element) {
   } 
   rightLength(event);
 };
+
 const rightLength = (event) => {
  
   const h2Element = document.getElementById('WordLength');
@@ -139,17 +140,16 @@ const Comparison = (event) => {
   let element = event.target;
   let charInput = event.keyCode;
   
-  if (charInput === 13)// enter was pushed
+  if (charInput === 13) // enter was pushed
     {
       Word = currentWord.join('');//take list and make into word
 
       if(Word.length !== 5){
-        Word = ''; // not long enough reset
+        //Word = ''; // not long enough reset
         wrongLength(event);
         return; // avoid even checking the rest
       }
-      // rightLength(event); This does work
-
+      
       //will update this soon
       secretWord = "GREAT"
     
@@ -232,20 +232,21 @@ function Coloring(result, event) {
 result = []; // reset result
 count = 0; //used for movement
 Word = '';// new guess is empty
+condition = false; // condition on
 
 for(let i = 0; i< 5; i++){
   currentWord.pop(); // empties the const
 };
-updateCountDisplay();
+updateWordDisplay();
 
 // Move focus to the next grid item
    // moveToNextGridElement(element);
    const gridItem = event.target.nextElementSibling; //moves to next item
    //count++; // when this is 5 we don't want to move
-   //if (gridItem){
-  //gridItem.focus();
-   //handleInput(event);
-  // };
+   if (gridItem){
+  gridItem.focus();
+   return;
+   };
 
 
 }
