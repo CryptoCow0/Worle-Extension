@@ -1,6 +1,14 @@
+
 document.body.style.width = '600px';
-// document.body.style.height = '700px';
-// Get all the grid items
+//Put the cursor into the first spot
+document.addEventListener('DOMContentLoaded', function() {
+  const firstGridItem = document.querySelector('.grid-item');
+  if (firstGridItem) {
+    firstGridItem.focus();
+  }
+});
+
+
 const gridItems = document.querySelectorAll('.grid-item');
 let count = 0;
 let x;
@@ -10,32 +18,43 @@ let condition = false; // used in Input Handling
 
 // Determine keys pressed
 const handleInput = (event) => {
-  let element = event.target;
-  let charInput = event.data; // Get the character entered
-   x = event.keyCode;
-  //updateCountDisplay();
-  if(charInput && condition === false){
-        // Convert input to uppercase
-    element.value = charInput.toUpperCase();
+    let element = event.target;
+    let charInput = event.data; // Get the character entered
 
-    currentWord.push(element.value);// this will help us when checking the word
-
+    x = event.keyCode;
     //updateCountDisplay();
-    if (count === 4){
-          condition = true; // you are at the end of the word
-          return;
-        };
-        
-        // Move focus to the next grid item
-        //moveToNextGridElement(element);
-        const gridItem = element.nextElementSibling; //moves to next item
-        count++; // when this is 5 we don't want to move
-        if (gridItem){
-        gridItem.focus();
-        };
-    }   
+//there is something in the grid
+    
+    //Input is a character
+    if(charInput && charInput !== '' && condition === false){
+          // Convert input to uppercase
+      element.value = charInput.toUpperCase();
 
-};
+      currentWord.push(element.value);// this will help us when checking the word
+
+      updateCountDisplay();
+      //return;
+    
+    
+
+    if (count === 4){
+      condition = true; // you are at the end of the word
+      return;
+    };
+    
+    // Move focus to the next grid item
+   // moveToNextGridElement(element);
+    const gridItem = element.nextElementSibling; //moves to next item
+    count++; // when this is 5 we don't want to move
+    if (gridItem){
+    gridItem.focus();
+    
+    };
+
+  }
+
+
+  };
 
 
 
@@ -43,7 +62,7 @@ const handleInput = (event) => {
 const updateCountDisplay = () => {
   const h1Element = document.getElementById('countDisplay');
   if (h1Element) {
-      h1Element.textContent = Word.toString(); // Convert count to string before setting as text content
+      h1Element.textContent = currentWord.toString(); // Convert count to string before setting as text content
       //h1Element.textContent = x;
     } 
 };
@@ -51,7 +70,7 @@ const updateCountDisplay = () => {
 const printKeyEvent = (event) => {
   const h2Element = document.getElementById('countDisplay');
   if (h2Element) {
-      h2Element.textContent = Word.toString(); // Set the text content to the value of event.key
+      h2Element.textContent = event.keyCode.toString(); // Set the text content to the value of event.key
      // h2Element.textContent = x;
     }
 };
@@ -80,23 +99,25 @@ const BackwardsMotion = (event) => {
   
   let element = event.target;
   let charInput = event.keyCode;
-
+  index = getIndex(element);
   if (charInput === 8) 
       {
-        //event.preventDefault();
+      event.preventDefault();
+      currentWord.pop();
 
+      updateCountDisplay();
        if(count !== 0)
          {count--;
           condition = false;
          };
        if(count === 0){condition=false;};
-
+         
        element.value = element.value.slice(0, -1);
-       moveToPreviousGridElement(element);
        
-        };
-   
-};
+       //currentWord.pop(index);
+        moveToPreviousGridElement(element);
+        }
+      };
 
 const wrongLength = (event) =>{
   const h1Element = document.getElementById('countDisplay');
@@ -104,6 +125,7 @@ if (h1Element) {
     h1Element.textContent = "Not long enough"; // Convert count to string before setting as text content
     //h1Element.textContent = x;
   } 
+  rightLength(event);
 };
 const rightLength = (event) => {
  
@@ -119,37 +141,114 @@ const Comparison = (event) => {
   
   if (charInput === 13)// enter was pushed
     {
-      Word = currentWord.join('');
+      Word = currentWord.join('');//take list and make into word
+
       if(Word.length !== 5){
         Word = ''; // not long enough reset
         wrongLength(event);
+        return; // avoid even checking the rest
       }
       // rightLength(event); This does work
 
+      //will update this soon
+      secretWord = "GREAT"
+    
     // Compare it to the secret word
-    if (Word === "GREAT"){
+    if (Word === secretWord){
       const gridItems = document.querySelectorAll('.grid-item');
       index = getIndex(element);
       // Change the background color to green
       for(let i = 5; i>0; i--){
         
         item = gridItems[index];
-      //gridItems.forEach(function(item) {
+
         item.style.backgroundColor = 'green';
+
         index--;
+      }
+    }
+    // not exactly equal
+    else{
+      result = [];
+      for(let i = 0; i < secretWord.length; i++)
+        {
+          const letter = secretWord[i]; // character
+          let match = false;
 
-    //});
+          //for(let j = 0; j < Word.length; j++){
+
+            if(Word[i] == letter){
+              result.push(2); // 2 means we have an exact match
+              match = true;
+            }
+            // If the letter is not found at the same index, check if it exists anywhere else in the second string
+          if (!match && secretWord.includes(Word[i])) {
+              result.push(1); // Same character exists but not at the same position
+              match = true;
+          }
+          
+          // If the letter is not found in the second string
+          if (!match) {
+              result.push(0);
+          };
+
+     
+
+    }
+    //after the loop
+    console.log(result);
+    Coloring(result,event);
+    
   }
-
-
-  }
-
 
     };
 
 };
 
+function Coloring(result, event) {
 
+  const gridItems = document.querySelectorAll('.grid-item');
+    let index = getIndex(event.target); // gets the index
+
+    // Change the background color based on the result array
+    for (let i = result.length - 1; i >= 0; i--) {
+      console.log(i);
+      item = gridItems[index];
+      if(!item){
+        console.error('Grid Item is bugging');
+        return;
+      }
+        if (result[i] === 2) {
+            item.style.backgroundColor = 'green';
+        } 
+        else if (result[i] === 1) {
+            item.style.backgroundColor = 'rgba(253,208,23, 0.8)';
+        }
+
+      index--;
+    
+};
+// After coloring you must move to next row and reset variables
+result = []; // reset result
+count = 0; //used for movement
+Word = '';// new guess is empty
+
+for(let i = 0; i< 5; i++){
+  currentWord.pop(); // empties the const
+};
+updateCountDisplay();
+
+// Move focus to the next grid item
+   // moveToNextGridElement(element);
+   const gridItem = event.target.nextElementSibling; //moves to next item
+   //count++; // when this is 5 we don't want to move
+   //if (gridItem){
+  //gridItem.focus();
+   //handleInput(event);
+  // };
+
+
+}
       
 const RandomWord = () => {
   //randomly generate a number and pick that number from the list of words
@@ -205,11 +304,19 @@ gridItems.forEach(gridItem => {
     gridItem.style.fontSize = fontSize + 'px';
 
     //SETS EACH INPUT TO BE UPPERCASE
-    // document.addEventListener('keydown', (event) => {
-    //    wrongLength(event);
+    // document.addEventListener("input", function(event) {
+    //    //printKeyEvent(event);
+    //    var charCode = event.keyCode;
+
+    //    //printKeyEvent(event);
+    //     if (charCode >= 65 && charCode <= 90){
+    //       printKeyEvent(event);
+
+    //       handleInput(event);
+    //     }
     // });
     gridItem.addEventListener("input", handleInput); // This is for characters placed into the grid
- 
+    //gridItem.addEventListener("keydown", handleInput);
     gridItem.addEventListener("keydown", BackwardsMotion); // backspace isn't considered an input so this is a seperate consideration
 
     gridItem.addEventListener("keydown", Comparison); // checks if this is a word
