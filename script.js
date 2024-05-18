@@ -135,33 +135,42 @@ const rightLength = (event) => {
     h2Element.textContent = Word;
   }
 }
+const NotInBank = (event) => {
+  const h3Element = document.getElementById('NotInBank');
+  if(h3Element){
+    h3Element.textContent = "Word not in word list."
+  }
+}
 
-const fetchSecretWord = () => {
+const InBank = (event) => {
+  const h3Element = document.getElementById('NotInBank');
+  if(h3Element){
+    h3Element.textContent = ""
+  }
+}
+const fetchSecretWord = async () => {
   //randomly generate a number and pick that number from the list of words
   const x = Math.floor(Math.random() * 164); // random number from 0 to 457
 
   // Specify the file path or URL
   const filePath = 'WordleList.txt'; // Update this to the correct path or URL
 
-  return fetch(filePath)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.text();
-    })
-    .then(data => {
-      // Split the file contents into an array of lines
-      const lines = data.split('\n');
-
-      if (lines.length >= x) {
-        // Get the secret word
-        return lines[x].trim();
-      } else {
-        throw new Error('The random number exceeds the number of words in the list.');
-      }
-    });
+  const response = await fetch(filePath);
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  const data = await response.text();
+  // Split the file contents into an array of lines
+  const lines = data.split('\n');
+  if (lines.length >= x) {
+    // Get the secret word
+    return lines[x].trim();
+  } else {
+    throw new Error('The random number exceeds the number of words in the list.');
+  }
 };
+
+
 
 let secretWord = '';
 
@@ -184,74 +193,88 @@ const setSecretWord = () => {
 
 setSecretWord(); // only call it once
 
-const Comparison = (event) => {
+// checks if work is in file
+const checkWordInFile = async (searchWord) => {
+  const filePath = 'WordleList.txt'; // Update this to the correct path or URL
+
+  try {
+    const response = await fetch(filePath);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch file: ${response.statusText}`);
+    }
+
+    const text = await response.text();
+    const regex = new RegExp(`\\b${searchWord}\\b`, 'i');
+    return regex.test(text);
+  } catch (error) {
+    console.error('Error:', error);
+    return false;
+  }
+};
+
+
+
+const Comparison = async (event) => {
   let element = event.target;
   let charInput = event.keyCode;
-  
-  if (charInput === 13) // enter was pushed
-    {
-      Word = currentWord.join('');//take list and make into word
 
-      if(Word.length !== 5){
-        //Word = ''; // not long enough reset
-        wrongLength(event);
-        return; // avoid even checking the rest
-      }
-      
-      //will update this soon
-      //secretWord = "GREAT";
-      
-    
+  if (charInput === 13) { // enter was pushed
+    let Word = currentWord.join(''); // take list and make into word
+
+    if (Word.length !== 5) {
+      wrongLength(event);
+      return; // avoid even checking the rest
+    }
+
     // Compare it to the secret word
-    if (Word === secretWord){
+    if (Word === secretWord) {
       const gridItems = document.querySelectorAll('.grid-item');
-      index = getIndex(element);
+      let index = getIndex(element);
       // Change the background color to green
-      for(let i = 5; i>0; i--){
-        
-        item = gridItems[index];
-
+      for (let i = 5; i > 0; i--) {
+        let item = gridItems[index];
         item.style.backgroundColor = 'green';
-
         index--;
       }
+    } else {
+      const check = await checkWordInFile(Word); // Await the result of the check
+      console.log(check); // Logs true if the word is found, otherwise false
+
+      if (!check) {
+        console.error("testing some things");
+        NotInBank(event);
+        return; // Exit if the word is not valid
+      }
+      InBank(event);
+
+      // Process the word comparison
+      let result = [];
+      for (let i = 0; i < secretWord.length; i++) {
+        const letter = secretWord[i]; // character
+        let match = false;
+
+        if (Word[i] === letter) {
+          result.push(2); // 2 means we have an exact match
+          match = true;
+        }
+
+        // If the letter is not found at the same index, check if it exists anywhere else in the second string
+        if (!match && secretWord.includes(Word[i])) {
+          result.push(1); // Same character exists but not at the same position
+          match = true;
+        }
+
+        // If the letter is not found in the second string
+        if (!match) {
+          result.push(0);
+        }
+      }
+
+      // After the loop
+      console.log(result);
+      Coloring(result, event);
     }
-    // not exactly equal
-    else{
-      result = [];
-      for(let i = 0; i < secretWord.length; i++)
-        {
-          const letter = secretWord[i]; // character
-          let match = false;
-
-          //for(let j = 0; j < Word.length; j++){
-
-            if(Word[i] == letter){
-              result.push(2); // 2 means we have an exact match
-              match = true;
-            }
-            // If the letter is not found at the same index, check if it exists anywhere else in the second string
-          if (!match && secretWord.includes(Word[i])) {
-              result.push(1); // Same character exists but not at the same position
-              match = true;
-          }
-          
-          // If the letter is not found in the second string
-          if (!match) {
-              result.push(0);
-          };
-
-     
-
-    }
-    //after the loop
-    console.log(result);
-    Coloring(result,event);
-    
   }
-
-    };
-
 };
 
 function Coloring(result, event) {

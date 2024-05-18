@@ -5,7 +5,10 @@ h1{
 h2{
     text-align: center;
     color: white;
-
+}
+h3{
+  text-align: center;
+  color:white;
 }
 
   .grid-container {
