@@ -6,15 +6,6 @@
     "action": {
       "default_popup": "hello.html",
     "permissions": ["scripting", "windows", "storage", "activeTab"]
-    },
-    "web-accessible_resources":[
-      {
-        "resources": ["WordleList.txt"],
-        "matches": ["<all_urls>"]
-      }
-    ],
-    "background":{
-      "service_worker": "background.js"
     }
 
   }
