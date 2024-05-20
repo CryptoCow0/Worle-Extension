@@ -117,7 +117,7 @@ const BackwardsMotion = (event) => {
         updateWordDisplay();
         }
       
-      };
+  };
 
 const wrongLength = (event) =>{
   const h1Element = document.getElementById('countDisplay');
@@ -148,6 +148,7 @@ const InBank = (event) => {
     h3Element.textContent = ""
   }
 }
+
 const fetchSecretWord = async () => {
   //randomly generate a number and pick that number from the list of words
   const x = Math.floor(Math.random() * 164); // random number from 0 to 457
@@ -220,7 +221,8 @@ const Comparison = async (event) => {
 
   if (charInput === 13) { // enter was pushed
     let Word = currentWord.join(''); // take list and make into word
-
+    Word = Word.toLowerCase(); // to be able to compare
+    console.log(Word);
     if (Word.length !== 5) {
       wrongLength(event);
       return; // avoid even checking the rest
@@ -241,7 +243,7 @@ const Comparison = async (event) => {
       console.log(check); // Logs true if the word is found, otherwise false
 
       if (!check) {
-        console.error("testing some things");
+        //console.error("testing some things");
         NotInBank(event);
         return; // Exit if the word is not valid
       }
