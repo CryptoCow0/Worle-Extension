@@ -32,13 +32,13 @@ const ForwardsMotion = (event) => {
       currentWord.push(element.value); // this will help us when checking the word
 
       updateWordDisplay(); // show's us the word for debuggin
-
-    count++; // when this is 5 we don't want to move
-
-    if (count === 5){
+      console.log("count = " + count);    
+    if (count === 4){
       condition = true; // you are at the end of the word
       return;
     };
+    count++; // when this is 4 we don't want to move
+
     
     // Move focus to the next grid item
     const gridItem = element.nextElementSibling; //moves to next item
@@ -46,19 +46,16 @@ const ForwardsMotion = (event) => {
     gridItem.focus();
     };
   }
-
 };
-
-
-
 
 // helper fucntion used for testing
 const updateWordDisplay = () => {
   const h1Element = document.getElementById('countDisplay');
   if (h1Element) {
-      h1Element.textContent = count.toString(); // Convert count to string before setting as text content
+      h1Element.textContent = currentWord.toString(); // Convert count to string before setting as text content
     } 
 };
+
 // debugging fucnction
 const printKeyEvent = (event) => {
   const h2Element = document.getElementById('countDisplay');
@@ -104,7 +101,7 @@ const BackwardsMotion = (event) => {
       event.preventDefault();
       currentWord.pop();
 
-      //updateWordDisplay();
+      updateWordDisplay();
       count--;
       console.log("BackSpaced was pressed");
       updateWordDisplay();
@@ -118,7 +115,7 @@ const BackwardsMotion = (event) => {
         updateWordDisplay(); // just for testing
         }
       
-  };
+};
 
 const wrongLength = (event) =>{
   const h1Element = document.getElementById('countDisplay');
@@ -235,7 +232,7 @@ const Comparison = async (event) => {
       // Change the background color to green
       for (let i = 5; i > 0; i--) {
         let item = gridItems[index];
-        item.style.backgroundColor = 'green';
+        item.style.backgroundColor = '#538D4E';
         index--;
       }
     } else {
@@ -293,7 +290,7 @@ function Coloring(result, event) {
         return;
       }
         if (result[i] === 2) {
-            item.style.backgroundColor = 'green';
+            item.style.backgroundColor = '#538D4E';
         } 
         else if (result[i] === 1) {
             item.style.backgroundColor = 'rgba(253,208,23, 0.8)';
