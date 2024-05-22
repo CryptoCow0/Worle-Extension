@@ -1,6 +1,6 @@
 # Wordle-Extension
 Chrome Extension for Wordle Game
 
-##Visuals
-> <img src="icon.png" align="center"/>
+## Visuals
+> <img src="Images/icon.png" align="center"/>
 
