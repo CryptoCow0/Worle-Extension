@@ -8,4 +8,4 @@
     "permissions": ["scripting", "windows", "storage", "activeTab"]
     }
 
-  }
+}
