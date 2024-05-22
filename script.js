@@ -9,9 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Global variables
 const gridItems = document.querySelectorAll('.grid-item');
-let count = 0;
-//RandomWord();
-// let x; was used for testing KeyCodes
+let count = 0; // used for word Length
 const currentWord = []; // takes letters from grid
 let Word = ''; // used for checking
 let condition = false; // used in Input Handling
@@ -19,22 +17,23 @@ let condition = false; // used in Input Handling
 
 
 // Determine keys pressed
-const handleInput = (event) => {
+const ForwardsMotion = (event) => {
     let element = event.target; //element that trigged the event
-    let charInput = event.data; // Get the character entered
-     
-//    x = event.keyCode; not actually needed because we are only concered with inputs
-    
+    let charInput = String.fromCharCode(event.keyCode); // Get the character entered
+    let key = event.keyCode; // get the keyCode
+
     //Input is a character
-    if(charInput && charInput !== '' && condition === false){
-      // Convert input to uppercase
+    if(key >= 64 && key <= 90 && condition === false){
+
+      event.preventDefault(); 
+
       element.value = charInput.toUpperCase();
 
       currentWord.push(element.value); // this will help us when checking the word
 
       updateWordDisplay(); // show's us the word for debuggin
 
-    count++; // when this is 4 we don't want to move
+    count++; // when this is 5 we don't want to move
 
     if (count === 5){
       condition = true; // you are at the end of the word
@@ -51,7 +50,9 @@ const handleInput = (event) => {
 };
 
 
-//helper fucntion 
+
+
+// helper fucntion used for testing
 const updateWordDisplay = () => {
   const h1Element = document.getElementById('countDisplay');
   if (h1Element) {
@@ -95,7 +96,7 @@ const BackwardsMotion = (event) => {
       {
         
       if(count === 0){
-        condition=false;
+        condition = false;
           return; // to avoid moving back
         };
 
@@ -103,18 +104,18 @@ const BackwardsMotion = (event) => {
       event.preventDefault();
       currentWord.pop();
 
+      //updateWordDisplay();
+      count--;
+      console.log("BackSpaced was pressed");
       updateWordDisplay();
-       if(count !== 0)
-         {count--;
-          condition = false;
-         };
+      condition = false;
        
          
        element.value = element.value.slice(0, -1);
        
        //currentWord.pop(index);
         moveToPreviousGridElement(element);
-        updateWordDisplay();
+        updateWordDisplay(); // just for testing
         }
       
   };
@@ -122,8 +123,7 @@ const BackwardsMotion = (event) => {
 const wrongLength = (event) =>{
   const h1Element = document.getElementById('countDisplay');
 if (h1Element) {
-    h1Element.textContent = "Not long enough"; // Convert count to string before setting as text content
-    //h1Element.textContent = x;
+    h1Element.textContent = "Wrong Length"; // Convert count to string before setting as text content
   } 
   rightLength(event);
 };
@@ -341,8 +341,14 @@ gridItems.forEach(gridItem => {
 
     // Set the font size of the grid item
     gridItem.style.fontSize = fontSize + 'px';
+    
+    let inputHandled = true;
+    let keydown = true;
 
-    gridItem.addEventListener("input", handleInput); // This is for characters placed into the grid
+    gridItem.addEventListener("keydown", ForwardsMotion); // This is for characters placed into the grid
+    
+    
+    
     //gridItem.addEventListener("keydown", handleInput);
     gridItem.addEventListener("keydown", BackwardsMotion); // backspace isn't considered an input so this is a seperate consideration
 
