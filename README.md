@@ -7,13 +7,13 @@ Chrome Extension for Wordle Game
 
 
 ## Word-List
-> <h1 src="WordleList.txt" />
+Working on updating the List to have more common words and unique ones
 
 
 ## Version 1.0.0
-  Standard 5-letter words
-  5 guesses unlike traditional "WORDLE"
+  Standard 5-letter words  <br />
+  5 guesses unlike traditional "WORDLE"  <br />
 
 ## Future Features (plan)
-  Math Guesser is in the works...
+  Math Guesser is in the works... <br />
   customizable grid-size...
