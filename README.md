@@ -1,6 +1,9 @@
 # Word-Guesser-Extension
 Chrome Extension for Wordle Game
 
+## General
+This is a simulated wordl
+
 ## Visuals
 > <img src="Images/icon.png" align="center"/>
 
@@ -17,4 +20,3 @@ Working on updating the List to have more common words and unique ones
 ## Future Features (plan)
   Math Guesser is in the works... <br />
   customizable grid-size...
->>>>>>> 668b6e1d721330fddc4a70e40af306fd29537afb
