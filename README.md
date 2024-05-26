@@ -2,7 +2,7 @@
 Chrome Extension for Wordle Game
 
 ## General
-Play a WORDLE-like game in your browser! There are soon to be over 2000+ words to choose from!
+Play a WORDLE-like game in your browser! There are soon to be over 2000+ words to choose from!<br />
 Yellow - Correct letter, wrong spot <br />
 Green -  Correct letter correct spot <br />
 no change - Wrong letter
