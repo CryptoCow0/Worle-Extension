@@ -25,8 +25,13 @@ const ForwardsMotion = (event) => {
     //Input is a character
     if(key >= 64 && key <= 90 && condition === false){
 
+      // prevent the lowercase from being put in the cell
       event.preventDefault(); 
-
+      //if count == 0)
+    
+    //   // Move focus to the next grid item
+    
+      //convert it to uppercase letter
       element.value = charInput.toUpperCase();
 
       currentWord.push(element.value); // this will help us when checking the word
@@ -39,12 +44,12 @@ const ForwardsMotion = (event) => {
     };
     count++; // when this is 4 we don't want to move
 
-    
-    // Move focus to the next grid item
     const gridItem = element.nextElementSibling; //moves to next item
     if (gridItem){
     gridItem.focus();
     };
+
+    
   }
 };
 
@@ -91,15 +96,18 @@ const BackwardsMotion = (event) => {
   index = getIndex(element);
   if (charInput === 8) 
       {
-        
+      currentWord.pop();
       if(count === 0){
         condition = false;
           return; // to avoid moving back
         };
 
+      if(count == 4){
+        event.preventDefault();
+      }
 
-      event.preventDefault();
-      currentWord.pop();
+      //event.preventDefault();
+      
 
       updateWordDisplay();
       count--;
