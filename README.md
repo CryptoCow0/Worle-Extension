@@ -1,9 +1,6 @@
 # Word-Guesser-Extension
 Chrome Extension for Wordle Game
 
-<<<<<<< HEAD
-
-=======
 ## Visuals
 > <img src="Images/icon.png" align="center"/>
 
