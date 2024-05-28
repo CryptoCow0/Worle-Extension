@@ -1,9 +1,12 @@
 # Word-Guesser-Extension
 Chrome Extension for Wordle Game
 
-<<<<<<< HEAD
+## General
+Play a WORDLE-like game in your browser! There are soon to be over 2000+ words to choose from!<br />
+Yellow - Correct letter, wrong spot <br />
+Green -  Correct letter correct spot <br />
+no change - Wrong letter
 
-=======
 ## Visuals
 > <img src="Images/icon.png" align="center"/>
 
@@ -20,4 +23,3 @@ Working on updating the List to have more common words and unique ones
 ## Future Features (plan)
   Math Guesser is in the works... <br />
   customizable grid-size...
->>>>>>> 668b6e1d721330fddc4a70e40af306fd29537afb
