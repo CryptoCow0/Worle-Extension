@@ -140,6 +140,7 @@ const rightLength = (event) => {
     h2Element.textContent = Word;
   }
 }
+
 const NotInBank = (event) => {
   const h3Element = document.getElementById('NotInBank');
   if(h3Element){
@@ -147,11 +148,13 @@ const NotInBank = (event) => {
   }
 }
 
+// avoids double counting letters
 const InBank = (event) => {
-  const h3Element = document.getElementById('NotInBank');
-  if(h3Element){
-    h3Element.textContent = ""
-  }
+  // secretWord
+  console.log("In Bank " + event.target.value);
+
+
+
 }
 
 const fetchSecretWord = async () => {
@@ -218,6 +221,24 @@ const checkWordInFile = async (searchWord) => {
   }
 };
 
+function RemoveMatchingLetter(str1, str2){
+
+  // convert strings into arrays for easier manipulation
+  let arr1 = str1.split('');
+
+  let position = 0;
+  for(let i = 0; i < arr1.length;i++){
+    
+    if (arr1[i] === str2){
+      arr1.splice(i,1);
+      break;
+    }
+
+  }
+  let newStr1 = arr1.join('');
+  return newStr1;
+
+}
 
 
 const Comparison = async (event) => {
@@ -243,7 +264,8 @@ const Comparison = async (event) => {
         item.style.backgroundColor = '#538D4E';
         index--;
       }
-    } else {
+    } 
+    else {
       const check = await checkWordInFile(Word); // Await the result of the check
       console.log(check); // Logs true if the word is found, otherwise false
 
@@ -252,31 +274,44 @@ const Comparison = async (event) => {
         NotInBank(event);
         return; // Exit if the word is not valid
       }
-      InBank(event);
+      
 
       // Process the word comparison
       let result = [];
-      for (let i = 0; i < secretWord.length; i++) {
-        const letter = secretWord[i]; // character
-        let match = false;
+      let usedChars = {};
 
-        if (Word[i] === letter) {
+      // populate the dictionary of characters
+      for(let character of secretWord){
+        usedChars[character] = (usedChars[character] || 0) +1;
+      }
+
+      for (let i = 0; i < Word.length; i++) {
+        const letter = Word[i]; // character
+        //let match = false;
+
+        if (secretWord[i] === letter) {
           result.push(2); // 2 means we have an exact match
-          match = true;
+          //match = true;
+          usedChars[letter]--;
         }
-
-        // If the letter is not found at the same index, check if it exists anywhere else in the second string
-        if (!match && secretWord.includes(Word[i])) {
-          result.push(1); // Same character exists but not at the same position
-          match = true;
+        else{
+          result.push(null); //Placeholder
         }
-
-        // If the letter is not found in the second string
-        if (!match) {
-          result.push(0);
+      }
+      for (let i =0; i< Word.length; i++){
+        if (result[i] == null){
+          if(usedChars[Word[i]] > 0){
+            result[i] = 1;
+            usedChars[Word[i]]--; //reduce the count for used cahracters
+          }
+        
+        else{
+          result[i] = 0;
         }
       }
 
+        }
+      
       // After the loop
       console.log(result);
       Coloring(result, event);
