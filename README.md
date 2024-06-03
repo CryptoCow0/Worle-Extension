@@ -11,6 +11,11 @@ no change - Wrong letter
 > <img src="Images/icon.png" align="center"/>
 
 
+Example of a successful completion of the Game.
+
+> <img src="Images/success.png" align="center"/>
+
+
 
 ## Word-List
 Working on updating the List to have more common words and unique ones
