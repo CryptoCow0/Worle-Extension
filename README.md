@@ -13,12 +13,12 @@ no change - Wrong letter
 
 Example of a successful completion of the Game.
 
-> <img src="Images/success.png" align="center"/>
+> <img src="Images/Success.png" align="center"/>
 
 
 
 ## Word-List
-Working on updating the List to have more common words and unique ones
+I am working on updating the List to have more common words and unique ones
 
 
 ## Version 1.0.0
