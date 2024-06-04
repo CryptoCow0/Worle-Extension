@@ -2,8 +2,8 @@
 Chrome Extension for Wordle Game
 
 ## General
-```html 
 
+$${\definecolor{lightgreen}{HTML}{538D4E}}$$ Testing
 
   <body>
     <span style="color:rgba(253,208,23,0.8)">Yellow</span> - Correct letter, wrong spot <br />
@@ -12,7 +12,7 @@ Chrome Extension for Wordle Game
   </body>
 
 
-```
+
 ## Visuals
 > <img src="Images/icon.png" align="center"/>
 
