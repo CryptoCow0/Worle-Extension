@@ -253,6 +253,7 @@ function Restart(){
   // After coloring you must move to next row and reset variables
 result = []; // reset result
 count = 0; //used for movement
+enter = 0;
 Word = '';// new guess is empty
 condition = false; // condition on
 
