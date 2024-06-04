@@ -2,16 +2,17 @@
 Chrome Extension for Wordle Game
 
 ## General
-<html>
+```html 
+
+
   <body>
     <span style="color:rgba(253,208,23,0.8)">Yellow</span> - Correct letter, wrong spot <br />
     <span style="color:#538D4E">Green</span>  - Correct letter correct spot <br />
     No Change - Wrong letter
   </body>
-  
-</html>
 
 
+```
 ## Visuals
 > <img src="Images/icon.png" align="center"/>
 
