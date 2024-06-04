@@ -3,9 +3,8 @@ Chrome Extension for Wordle Game
 
 ## General
 
-$${\color{#538D4E}{Green }} Correct Letter Correct Spot
-{\color{rgba(253,208,23,0.8)}{Yellow}}  
- Correct letter, Wrong Spot
+$${\color{#538D4E}{Green }}$$ Correct Letter Correct Spot
+$${\color{rgba(253,208,23,0.8)}{Yellow}}$$ Correct letter, Wrong Spot
 No Change - Wrong Letter
 
 
