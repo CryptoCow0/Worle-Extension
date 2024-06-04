@@ -20,37 +20,44 @@ let condition = false; // used in Input Handling
 const ForwardsMotion = (event) => {
     let element = event.target; //element that trigged the event
     let charInput = String.fromCharCode(event.keyCode); // Get the character entered
-    let key = event.keyCode; // get the keyCode
-
+    let key = event.key; // get the keyCode
+    //console.log(element.value);
     //Input is a character
-    if(key >= 64 && key <= 90 && condition === false){
+    if(/^[A-Z]$/.test(key.toUpperCase()) && condition === false){
 
-      // prevent the lowercase from being put in the cell
-      event.preventDefault(); 
-      //if count == 0)
+      if (count != 0){
+      const gridItem = element.nextElementSibling; //moves to next item
+       // prevent the lowercase from being put in the cell
+       //gridItem.preventDefault(); 
+      //console.log("length is " + gridItem.length);
+      //if (gridItem){
+       gridItem.focus();
+       gridItem.value = charInput.toUpperCase();
+     
+      currentWord.push(gridItem.value); // push the letter into the list
+      }
+      else{
+        element.value = charInput.toUpperCase();
+        currentWord.push(element.value);
+      }
+      updateWordDisplay(); // show's us the word for debuggin 
+
+
+      count++; // when this is 4 we don't want to move
+     
+      if (count === 5){
+
+        condition = true; // you are at the end of the word
+        return;
+      };
     
-    //   // Move focus to the next grid item
+     
     
-      //convert it to uppercase letter
-      element.value = charInput.toUpperCase();
+  };
 
-      currentWord.push(element.value); // this will help us when checking the word
-
-      updateWordDisplay(); // show's us the word for debuggin
-      console.log("count = " + count);    
-    if (count === 4){
-      condition = true; // you are at the end of the word
-      return;
-    };
-    count++; // when this is 4 we don't want to move
-
-    const gridItem = element.nextElementSibling; //moves to next item
-    if (gridItem){
-    gridItem.focus();
-    };
-
+  
     
-  }
+  
 };
 
 // helper fucntion used for testing
@@ -96,32 +103,36 @@ const BackwardsMotion = (event) => {
   index = getIndex(element);
   if (charInput === 8) 
       {
-      currentWord.pop();
-      if(count === 0){
-        condition = false;
-          return; // to avoid moving back
-        };
 
-      if(count == 4){
-        event.preventDefault();
+        clearTags(event);
+
+
+
+      console.log(count);
+      if(count === 0 ){
+        currentWord.pop();
+        updateWordDisplay();
+        // condition = false;
+          return; // to avoid moving back
+      }
+      if (count === 1){
+        count --;
+        currentWord.pop();
+        updateWordDisplay();
+        return;
       }
 
-      //event.preventDefault();
-      
-
-      updateWordDisplay();
       count--;
+      condition = false; // always is reduent TODO: optomize
       console.log("BackSpaced was pressed");
+      
       updateWordDisplay();
-      condition = false;
-       
-         
-       element.value = element.value.slice(0, -1);
-       
-       //currentWord.pop(index);
-        moveToPreviousGridElement(element);
-        updateWordDisplay(); // just for testing
-        }
+      currentWord.pop();
+
+      moveToPreviousGridElement(element);
+      updateWordDisplay(); // just for testing
+      
+     }
       
 };
 
@@ -130,7 +141,6 @@ const wrongLength = (event) =>{
 if (h1Element) {
     h1Element.textContent = "Wrong Length"; // Convert count to string before setting as text content
   } 
-  rightLength(event);
 };
 
 const rightLength = (event) => {
@@ -144,22 +154,21 @@ const rightLength = (event) => {
 const NotInBank = (event) => {
   const h3Element = document.getElementById('NotInBank');
   if(h3Element){
-    h3Element.textContent = "Word not in word list."
+    h3Element.textContent = "Word not in word list.";
+  }
+}
+const clearTags = (event) =>{
+  const h3Element = document.getElementById('NotInBank');
+  if(h3Element){
+    h3Element.textContent = "";
   }
 }
 
-// avoids double counting letters
-const InBank = (event) => {
-  // secretWord
-  console.log("In Bank " + event.target.value);
 
-
-
-}
 
 const fetchSecretWord = async () => {
   //randomly generate a number and pick that number from the list of words
-  const x = Math.floor(Math.random() * 164); // random number from 0 to 457
+  const x = Math.floor(Math.random() * 14855); // random number from 0 to 457
 
   // Specify the file path or URL
   const filePath = 'WordleList.txt'; // Update this to the correct path or URL
@@ -238,13 +247,38 @@ function RemoveMatchingLetter(str1, str2){
   let newStr1 = arr1.join('');
   return newStr1;
 
+};
+
+function Restart(){
+  // After coloring you must move to next row and reset variables
+result = []; // reset result
+count = 0; //used for movement
+Word = '';// new guess is empty
+condition = false; // condition on
+
+for(let i = 0; i< 5; i++){
+  currentWord.pop(); // empties the const
+};
+  gridItems.forEach(gridItem =>{
+    gridItem.value = ' ';
+
+    gridItem.style.backgroundColor = "rgba(80, 79, 79, 0.8)";
+    //console.log("TESTING THIS ISH")
+  })
+  
+
+  // TODO AFTER PUT FOCUS ON THE LEFT MOST GRID.
+
+  //Set a new word to be the secrectWord;
+  setSecretWord();
+
 }
 
-
+let enter = 0;
 const Comparison = async (event) => {
   let element = event.target;
   let charInput = event.keyCode;
-
+  let sucess = false;
   if (charInput === 13) { // enter was pushed
     let Word = currentWord.join(''); // take list and make into word
     Word = Word.toLowerCase(); // to be able to compare
@@ -253,9 +287,10 @@ const Comparison = async (event) => {
       wrongLength(event);
       return; // avoid even checking the rest
     }
-
+    
     // Compare it to the secret word
     if (Word === secretWord) {
+      sucess = true;
       const gridItems = document.querySelectorAll('.grid-item');
       let index = getIndex(element);
       // Change the background color to green
@@ -263,7 +298,10 @@ const Comparison = async (event) => {
         let item = gridItems[index];
         item.style.backgroundColor = '#538D4E';
         index--;
-      }
+      };
+      
+      
+
     } 
     else {
       const check = await checkWordInFile(Word); // Await the result of the check
@@ -316,6 +354,25 @@ const Comparison = async (event) => {
       console.log(result);
       Coloring(result, event);
     }
+    if(sucess){
+      if(confirm("You did it! Want to play again?")){;
+      Restart();
+      }
+    }
+    enter++;
+    if(enter == 5 && sucess == false){
+      if(confirm("DANG IT SO CLOSE... kinda, the correct word was " + secretWord +'\n' + "Want to play again? (You know you do.)"))
+        {
+          
+        Restart();
+        return;
+      }
+      else{
+        window.close();
+      }
+      
+    }
+   
   }
 };
 
@@ -390,7 +447,7 @@ gridItems.forEach(gridItem => {
     
     
     //gridItem.addEventListener("keydown", handleInput);
-    gridItem.addEventListener("keydown", BackwardsMotion); // backspace isn't considered an input so this is a seperate consideration
+    gridItem.addEventListener("keyup", BackwardsMotion); // backspace isn't considered an input so this is a seperate consideration
 
     gridItem.addEventListener("keydown", Comparison); // checks if this is a word
 
