@@ -40,7 +40,7 @@ const ForwardsMotion = (event) => {
         element.value = charInput.toUpperCase();
         currentWord.push(element.value);
       }
-      updateWordDisplay(); // show's us the word for debuggin 
+      ////updateWordDisplay(); // show's us the word for debuggin 
 
 
       count++; // when this is 4 we don't want to move
@@ -111,14 +111,14 @@ const BackwardsMotion = (event) => {
       console.log(count);
       if(count === 0 ){
         currentWord.pop();
-        updateWordDisplay();
+        //updateWordDisplay();
         // condition = false;
           return; // to avoid moving back
       }
       if (count === 1){
         count --;
         currentWord.pop();
-        updateWordDisplay();
+        //updateWordDisplay();
         return;
       }
 
@@ -126,11 +126,11 @@ const BackwardsMotion = (event) => {
       condition = false; // always is reduent TODO: optomize
       console.log("BackSpaced was pressed");
       
-      updateWordDisplay();
+      //updateWordDisplay();
       currentWord.pop();
 
       moveToPreviousGridElement(element);
-      updateWordDisplay(); // just for testing
+      //updateWordDisplay(); // just for testing
       
      }
       
@@ -253,7 +253,7 @@ function Restart(){
   // After coloring you must move to next row and reset variables
 result = []; // reset result
 count = 0; //used for movement
-enter = 0;
+enter = 0; 
 Word = '';// new guess is empty
 condition = false; // condition on
 
@@ -409,7 +409,7 @@ condition = false; // condition on
 for(let i = 0; i< 5; i++){
   currentWord.pop(); // empties the const
 };
-updateWordDisplay();
+////updateWordDisplay();
 
 // Move focus to the next grid item
    // moveToNextGridElement(element);
