@@ -3,7 +3,7 @@ Chrome Extension for Wordle Game
 
 ## General
 
-$${\color{lightgreen}{HTML}{538D4E}}$$ Testing
+$${\color{538D4E}{HTML}{Green}}$$ Testing
 
   <body>
     <span style="color:rgba(253,208,23,0.8)">Yellow</span> - Correct letter, wrong spot <br />
