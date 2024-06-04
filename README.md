@@ -3,11 +3,12 @@ Chrome Extension for Wordle Game
 
 ## General
 <html>
-Play a WORDLE-like game in your browser! There are soon to be over 2000+ words to choose from!<br />
-<span style="color:rgba(253,208,23,0.8)">Yellow</span> - Correct letter, wrong spot <br />
-<span style="color:#538D4E">Green</span>  - Correct letter correct spot <br />
-no change - Wrong letter
+  <body>
+    <span style="color:rgba(253,208,23,0.8)">Yellow</span> - Correct letter, wrong spot <br />
+    <span style="color:#538D4E">Green</span>  - Correct letter correct spot <br />
+  </body>
 </html>
+
 
 ## Visuals
 > <img src="Images/icon.png" align="center"/>
