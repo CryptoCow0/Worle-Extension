@@ -147,7 +147,7 @@ const rightLength = (event) => {
  
   const h2Element = document.getElementById('WordLength');
   if(h2Element){
-    h2Element.textContent = Word;
+    h2Element.textContent = "";
   }
 }
 
@@ -158,10 +158,16 @@ const NotInBank = (event) => {
   }
 }
 const clearTags = (event) =>{
+  // Clears if the word doesn't exist
   const h3Element = document.getElementById('NotInBank');
   if(h3Element){
     h3Element.textContent = "";
   }
+  // clears length issues
+  const h1Element = document.getElementById('countDisplay');
+  if (h1Element) {
+      h1Element.textContent = ""; // Convert count to string before setting as text content
+    } 
 }
 
 
