@@ -1,16 +1,17 @@
 let English = false;
 let Spanish = false;
-
 document.getElementById('select-english').addEventListener('click', function() {
   document.getElementById('main-content').classList.remove('hidden');
   document.getElementById('select-english').classList.add('hidden');
   English = true;
+  setSecretWord();
 
 });
 
 document.getElementById('select-spanish').addEventListener('click', function() {
   document.getElementById('main-content').classList.remove('hidden');
-  //Spanish = true;
+  Spanish = true;
+  setSecretWord();
 });
 
 
@@ -192,28 +193,47 @@ const clearTags = (event) =>{
 
 
 const fetchSecretWord = async () => {
-if(English == true){
+
   //randomly generate a number and pick that number from the list of words
   const x = Math.floor(Math.random() * 14855); // random number from 0 to 14855
   const y = Math.floor(Math.random() * 200); // Random number for the Spanish list
   // Specify the file path or URL
 
-  const filePath = 'WordleList.txt'; // Update this to the correct path or URL
+  //const filePath = 'WordleList.txt'; // Update this to the correct path or URL
 
+ // const filePathSpanish = 'WordleListSpanish.txt'
+
+  const filePath = English ? 'WordleList.txt' : (Spanish ? 'WordleListSpanish.txt' : 'WordleList.txt');
+  console.log("FilePATH is " + filePath);
   const response = await fetch(filePath);
+
+
+  
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
   const data = await response.text();
   // Split the file contents into an array of lines
   const lines = data.split('\n');
+if(Spanish){
+
+    if (lines.length >= y) {
+    // Get the secret word
+    return lines[y].trim();
+  } else {
+    throw new Error('The random number exceeds the number of words in the list.');
+  }
+  }
+
+
+  else {
   if (lines.length >= x) {
     // Get the secret word
     return lines[x].trim();
   } else {
     throw new Error('The random number exceeds the number of words in the list.');
   }
-}
+  }
 
 };
 
@@ -237,8 +257,6 @@ const setSecretWord = () => {
     });
 };
 
-if(English)
-  {setSecretWord();} // only call it once
 
 // checks if work is in file
 const checkWordInFile = async (searchWord) => {
