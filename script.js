@@ -1,5 +1,24 @@
+let English = false;
+let Spanish = false;
+
+document.getElementById('select-english').addEventListener('click', function() {
+  document.getElementById('main-content').classList.remove('hidden');
+  document.getElementById('select-english').classList.add('hidden');
+  English = true;
+
+});
+
+document.getElementById('select-spanish').addEventListener('click', function() {
+  document.getElementById('main-content').classList.remove('hidden');
+  //Spanish = true;
+});
+
+
 document.body.style.width = '600px';
 //Put the cursor into the first spot
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
   const firstGridItem = document.querySelector('.grid-item');
   if (firstGridItem) {
@@ -173,10 +192,12 @@ const clearTags = (event) =>{
 
 
 const fetchSecretWord = async () => {
+if(English == true){
   //randomly generate a number and pick that number from the list of words
-  const x = Math.floor(Math.random() * 14855); // random number from 0 to 457
-
+  const x = Math.floor(Math.random() * 14855); // random number from 0 to 14855
+  const y = Math.floor(Math.random() * 200); // Random number for the Spanish list
   // Specify the file path or URL
+
   const filePath = 'WordleList.txt'; // Update this to the correct path or URL
 
   const response = await fetch(filePath);
@@ -192,6 +213,8 @@ const fetchSecretWord = async () => {
   } else {
     throw new Error('The random number exceeds the number of words in the list.');
   }
+}
+
 };
 
 
@@ -214,8 +237,8 @@ const setSecretWord = () => {
     });
 };
 
-
-setSecretWord(); // only call it once
+if(English)
+  {setSecretWord();} // only call it once
 
 // checks if work is in file
 const checkWordInFile = async (searchWord) => {
@@ -431,8 +454,8 @@ for(let i = 0; i< 5; i++){
       
 
 
-// Iterate over each grid item
 gridItems.forEach(gridItem => {
+
    //onkeyup = gitdItem.value = gridItem.value.toUpperCase();
     // Get the computed style of the grid item
     const gridItemStyle = getComputedStyle(gridItem);

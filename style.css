@@ -10,6 +10,13 @@ h3{
   text-align: center;
   color:white;
 }
+button{
+  text-align: left;
+}
+
+.hidden{
+  display: none;
+}
 
   .grid-container {
     display: grid;
