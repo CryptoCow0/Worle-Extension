@@ -3,6 +3,7 @@ let Spanish = false;
 document.getElementById('select-english').addEventListener('click', function() {
   document.getElementById('main-content').classList.remove('hidden');
   document.getElementById('select-english').classList.add('hidden');
+  document.getElementById('select-spanish').classList.add('hidden');
   English = true;
   setSecretWord();
 
@@ -10,6 +11,8 @@ document.getElementById('select-english').addEventListener('click', function() {
 
 document.getElementById('select-spanish').addEventListener('click', function() {
   document.getElementById('main-content').classList.remove('hidden');
+  document.getElementById('select-english').classList.add('hidden');
+  document.getElementById('select-spanish').classList.add('hidden');
   Spanish = true;
   setSecretWord();
 });
@@ -196,7 +199,7 @@ const fetchSecretWord = async () => {
 
   //randomly generate a number and pick that number from the list of words
   const x = Math.floor(Math.random() * 14855); // random number from 0 to 14855
-  const y = Math.floor(Math.random() * 200); // Random number for the Spanish list
+  const y = Math.floor(Math.random() * 174); // Random number for the Spanish list
   // Specify the file path or URL
 
   //const filePath = 'WordleList.txt'; // Update this to the correct path or URL
@@ -244,7 +247,10 @@ let secretWord = '';
 const setSecretWord = () => {
   fetchSecretWord()
     .then(word => {
-      secretWord = word;
+      secretWord = word.toLowerCase();
+      if (secretWord.length != 5){
+        setSecretWord();
+      }
       // Update the DOM with the secret word if needed
       const secretWordHeading = document.getElementById('secretWordHeading');
       if (secretWordHeading) {
@@ -260,7 +266,8 @@ const setSecretWord = () => {
 
 // checks if work is in file
 const checkWordInFile = async (searchWord) => {
-  const filePath = 'WordleList.txt'; // Update this to the correct path or URL
+  const filePath = English ? 'WordleList.txt' : (Spanish ? 'WordleListSpanish.txt' : null);
+  //const filePath = 'WordleList.txt'; // Update this to the correct path or URL
 
   try {
     const response = await fetch(filePath);
