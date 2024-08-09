@@ -147,7 +147,7 @@ const BackwardsMotion = (event) => {
 
       count--;
       condition = false; // always is reduent TODO: optomize
-      console.log("BackSpaced was pressed");
+      //console.log("BackSpaced was pressed");
       
       //updateWordDisplay();
       currentWord.pop();
@@ -198,7 +198,7 @@ const clearTags = (event) =>{
 const fetchSecretWord = async () => {
 
   //randomly generate a number and pick that number from the list of words
-  const x = Math.floor(Math.random() * 14855); // random number from 0 to 14855
+  const x = Math.floor(Math.random() * 381); // random number from 0 to 377
   const y = Math.floor(Math.random() * 174); // Random number for the Spanish list
   // Specify the file path or URL
 
@@ -207,7 +207,7 @@ const fetchSecretWord = async () => {
  // const filePathSpanish = 'WordleListSpanish.txt'
 
   const filePath = English ? 'WordleList.txt' : (Spanish ? 'WordleListSpanish.txt' : 'WordleList.txt');
-  console.log("FilePATH is " + filePath);
+  //console.log("FilePATH is " + filePath);
   const response = await fetch(filePath);
 
 
@@ -337,7 +337,7 @@ const Comparison = async (event) => {
   if (charInput === 13) { // enter was pushed
     let Word = currentWord.join(''); // take list and make into word
     Word = Word.toLowerCase(); // to be able to compare
-    console.log(Word);
+    //console.log(Word);
     if (Word.length !== 5) {
       wrongLength(event);
       return; // avoid even checking the rest
@@ -353,14 +353,16 @@ const Comparison = async (event) => {
         let item = gridItems[index];
         item.style.backgroundColor = '#538D4E';
         index--;
+        sucess = true;
       };
+      //sucess = true;
       
       
 
     } 
     else {
       const check = await checkWordInFile(Word); // Await the result of the check
-      console.log(check); // Logs true if the word is found, otherwise false
+      //console.log(check); // Logs true if the word is found, otherwise false
 
       if (!check) {
         //console.error("testing some things");
@@ -406,10 +408,11 @@ const Comparison = async (event) => {
         }
       
       // After the loop
-      console.log(result);
+      //console.log(result);
       Coloring(result, event);
     }
     if(sucess){
+      
       if(confirm("You did it! Want to play again?")){;
       Restart();
       }
@@ -438,7 +441,7 @@ function Coloring(result, event) {
 
     // Change the background color based on the result array
     for (let i = result.length - 1; i >= 0; i--) {
-      console.log(i);
+      //console.log(i);
       item = gridItems[index];
       if(!item){
         console.error('Grid Item is bugging');
