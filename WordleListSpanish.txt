@@ -173,6 +173,7 @@ Mayor
 Menor
 hunto
 Amigo
+nadar
 Arroz
 Baile
 Barco

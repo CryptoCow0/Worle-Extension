@@ -129,8 +129,6 @@ const BackwardsMotion = (event) => {
 
         clearTags(event);
 
-
-
       console.log(count);
       if(count === 0 ){
         currentWord.pop();
@@ -353,8 +351,9 @@ const Comparison = async (event) => {
         let item = gridItems[index];
         item.style.backgroundColor = '#538D4E';
         index--;
-        sucess = true;
+        //sucess = true;
       };
+      setti
       //sucess = true;
       
       
